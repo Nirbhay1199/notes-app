@@ -1,3 +1,5 @@
+import { GoogleAuthResponse } from './api';
+
 // Google OAuth Configuration
 export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
@@ -11,10 +13,11 @@ export interface GoogleUserData {
   family_name?: string;
 }
 
-export interface GoogleAuthResponse {
-  user: any; // Will be replaced with your User interface
-  message: string;
-  token: string; // JWT token
+// GoogleAuthResponse is now defined in api.ts
+
+export interface GoogleCredentialResponse {
+  credential: string;
+  select_by: string;
 }
 
 // Google OAuth Functions
@@ -26,13 +29,13 @@ export const initializeGoogleAuth = (): Promise<void> => {
     }
 
     // Check if Google script is already loaded
-    if (window.google && window.google.accounts) {
+    if (window.google) {
       try {
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: handleGoogleCredentialResponse,
           auto_select: false,
-          cancel_on_tap_outside: true,
+          cancel_on_tap_outside: false,
         });
         resolve();
         return;
@@ -43,7 +46,7 @@ export const initializeGoogleAuth = (): Promise<void> => {
 
     // Wait for Google script to load (since it's in index.html)
     const checkGoogle = () => {
-      if (window.google && window.google.accounts) {
+      if (window.google) {
         try {
           window.google.accounts.id.initialize({
             client_id: GOOGLE_CLIENT_ID,
@@ -67,7 +70,7 @@ export const initializeGoogleAuth = (): Promise<void> => {
 };
 
 // Handle Google credential response
-export const handleGoogleCredentialResponse = (response: any) => {
+export const handleGoogleCredentialResponse = (response: GoogleCredentialResponse) => {
   // This will be called by Google after successful authentication
   // You can access the credential with response.credential
   console.log('Google credential received:', response);
@@ -108,8 +111,53 @@ export const triggerGoogleSignOut = (): void => {
   }
 };
 
+// New function to initialize Google with renderButton approach
+export const initializeGoogleAuthWithButton = (callback: (response: GoogleCredentialResponse) => void): void => {
+  if (!window.google || !window.google.accounts) {
+    console.error('Google Identity Services not loaded');
+    return;
+  }
+
+  if (!GOOGLE_CLIENT_ID) {
+    console.error('Google Client ID not configured');
+    return;
+  }
+
+  try {
+    console.log('Initializing Google with Client ID:', GOOGLE_CLIENT_ID);
+    
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: callback,
+    });
+
+    const buttonElement = document.getElementById("google-button");
+    if (!buttonElement) {
+      console.error('Google button element not found');
+      return;
+    }
+
+    console.log('Rendering Google button...');
+    // Render the Google button
+    window.google.accounts.id.renderButton(
+      buttonElement,
+      {
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "rectangular",
+        width: "100%"
+      }
+    );
+    
+    console.log('Google button rendered successfully');
+  } catch (error) {
+    console.error('Failed to initialize Google Auth with button:', error);
+  }
+};
+
 // Decode JWT token from Google (for debugging)
-export const decodeGoogleCredential = (credential: string): any => {
+export const decodeGoogleCredential = (credential: string): Record<string, unknown> | null => {
   try {
     const base64Url = credential.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -129,9 +177,10 @@ declare global {
     google: {
       accounts: {
         id: {
-          initialize: (config: any) => void;
+          initialize: (config: { client_id: string; callback: (response: GoogleCredentialResponse) => void; auto_select?: boolean; cancel_on_tap_outside?: boolean }) => void;
           prompt: () => void;
           disableAutoSelect: () => void;
+          renderButton: (element: HTMLElement | null, options: { theme?: string; size?: string; text?: string; shape?: string; width?: string }) => void;
         };
       };
     };

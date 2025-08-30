@@ -14,11 +14,7 @@ export const useNotes = () => {
 
   const fetchNotes = useCallback(async () => {
     if (!user?._id) {
-      toast({
-        title: "Error",
-        description: "User not authenticated",
-        variant: "destructive",
-      });
+      // Don't show error toast, just return silently
       return;
     }
 

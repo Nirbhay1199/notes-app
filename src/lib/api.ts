@@ -49,6 +49,12 @@ export interface OTPResponse {
   expiresAt: string;
 }
 
+export interface GoogleAuthResponse {
+  user: User;
+  message: string;
+  token: string; // JWT token
+}
+
 // API Client
 class ApiClient {
   private baseUrl: string;
@@ -62,10 +68,15 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
+    
+    // Get JWT token from storage
+    const token = localStorage.getItem('jwt_token') || sessionStorage.getItem('jwt_token');
+    
     const config: RequestInit = {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
         ...options.headers,
       },
       credentials: 'include', // Include cookies for session management
@@ -163,26 +174,26 @@ class ApiClient {
   }
 
   // Notes APIs
-  async getNotes(userId: string): Promise<NotesResponse> {
-    return this.request<NotesResponse>(`/api/notes?userId=${userId}`);
+  async getNotes(): Promise<NotesResponse> {
+    return this.request<NotesResponse>('/api/notes');
   }
 
-  async createNote(data: { title: string; content: string; userId: string }): Promise<Note> {
+  async createNote(data: { title: string; content: string }): Promise<Note> {
     return this.request('/api/notes', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async updateNote(id: string, data: { title: string; content: string; userId: string }): Promise<Note> {
+  async updateNote(id: string, data: { title: string; content: string }): Promise<Note> {
     return this.request(`/api/notes/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async deleteNote(id: string, userId: string): Promise<{ message: string }> {
-    return this.request(`/api/notes/${id}?userId=${userId}`, {
+  async deleteNote(id: string): Promise<{ message: string }> {
+    return this.request(`/api/notes/${id}`, {
       method: 'DELETE',
     });
   }
