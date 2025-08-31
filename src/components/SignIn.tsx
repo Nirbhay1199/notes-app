@@ -77,10 +77,10 @@ export const SignIn = ({ onSwitchToSignUp }: SignInProps) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-sm sm:max-w-md mx-auto">
       {/* Form */}
-      <div className="space-y-6">
-        <div>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Sign in</h1>
           <p className="text-gray-600">Please login to continue to your account.</p>
         </div>
@@ -144,7 +144,7 @@ export const SignIn = ({ onSwitchToSignUp }: SignInProps) => {
             />
           </form>
         ) : (
-          <form onSubmit={handleVerifyOTP} className="space-y-6">
+          <form onSubmit={handleVerifyOTP} className="space-y-4 sm:space-y-6">
             {/* Email Display */}
             <div className="text-center p-3 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">OTP sent to:</p>
@@ -216,7 +216,7 @@ export const SignIn = ({ onSwitchToSignUp }: SignInProps) => {
             {/* Sign in button */}
             <Button
               type="submit"
-              className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-200"
+              className="w-full h-11 sm:h-12 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-200 text-sm sm:text-base"
               disabled={isLoading || !formData.otp.trim()}
             >
               {isLoading ? 'Verifying...' : 'Sign in'}

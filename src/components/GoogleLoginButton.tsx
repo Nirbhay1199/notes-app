@@ -122,8 +122,8 @@ export const GoogleLoginButton = ({
   return (
     <div className={`w-full ${className}`}>
       {!isInitialized ? (
-        <div className="w-full h-12 bg-gray-100 text-gray-500 font-medium rounded-lg border-2 border-gray-200 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400"></div>
+        <div className="w-full h-11 sm:h-12 bg-gray-100 text-gray-500 font-medium rounded-lg border-2 border-gray-200 flex items-center justify-center text-sm sm:text-base">
+          <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-gray-400"></div>
           <span className="ml-2">Initializing Google...</span>
         </div>
       ) : (

@@ -79,7 +79,8 @@ class ApiClient {
         ...(token && { 'Authorization': `Bearer ${token}` }),
         ...options.headers,
       },
-      credentials: 'include', // Include cookies for session management
+      // Remove credentials: 'include' since we're using JWT tokens
+      // credentials: 'include', // Include cookies for session management
     };
 
     try {

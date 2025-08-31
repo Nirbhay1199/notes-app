@@ -7,21 +7,21 @@ interface AuthLayoutProps {
 
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="min-h-screen flex relative">
-      {/* HD Header - Absolute positioned in top-left corner */}
-      <div className="absolute top-3 left-3 z-20 flex items-center">
+    <div className="min-h-screen flex flex-col lg:flex-row relative">
+      {/* HD Header - Centered on mobile, positioned on desktop */}
+      <div className="flex justify-center lg:absolute lg:top-3 lg:left-3 z-20 flex items-center pt-6 lg:pt-0">
         <img src="/hd_icon.png" alt="HD Icon" className="w-8 h-8 mr-3" />
         <span className="text-xl font-semibold text-gray-900">HD</span>
       </div>
 
-      {/* Left side - Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-white ml-20">
-        <div className="w-full max-w-md">
+      {/* Main content - Form */}
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-12 bg-white lg:ml-20">
+        <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {children}
         </div>
       </div>
 
-      {/* Right side - Fluid background  */}
+      {/* Right side - Fluid background - Hidden on mobile, shown on larger screens */}
       <div 
         className="hidden lg:flex lg:w-1/2 relative mt-1 mb-1 mr-5"
         style={{

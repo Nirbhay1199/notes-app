@@ -128,23 +128,23 @@ export const Dashboard = ({ user }: DashboardProps) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <FileText className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-gray-900">Notes</h1>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">Notes</h1>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <Badge variant="secondary" className="px-3 py-1">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Badge variant="secondary" className="px-2 py-1 text-xs sm:text-sm">
                 {safeNotes.length} {safeNotes.length === 1 ? 'Note' : 'Notes'}
               </Badge>
               
-              <div className="flex items-center space-x-3">
-                <Avatar>
-                  <AvatarFallback className="bg-primary text-primary-foreground">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs sm:text-sm">
                     {getUserInitials(user.name || '')}
                   </AvatarFallback>
                 </Avatar>
@@ -156,7 +156,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
                   variant="ghost"
                   size="sm"
                   onClick={handleSignOut}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 h-8 w-8 sm:h-10 sm:w-10 p-0"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -167,37 +167,37 @@ export const Dashboard = ({ user }: DashboardProps) => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white">
-            <h2 className="text-2xl font-bold mb-2">Welcome back, {user.name?.split(' ')[0] || user.name}!</h2>
-            <p className="text-blue-100">
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">Welcome back, {user.name?.split(' ')[0] || user.name}!</h2>
+            <p className="text-sm sm:text-base text-blue-100">
               Ready to capture your ideas? You have {safeNotes.length} notes in your collection.
             </p>
           </div>
         </div>
 
         {/* Actions Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search notes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-10 sm:h-11"
             />
           </div>
           
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button className="bg-primary hover:bg-primary/90 h-10 sm:h-11 text-sm sm:text-base">
                 <Plus className="mr-2 h-4 w-4" />
                 New Note
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[525px]">
+            <DialogContent className="sm:max-w-[525px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create New Note</DialogTitle>
                 <DialogDescription>
@@ -264,7 +264,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filteredNotes.map((note) => (
               <Card key={note._id} className="glass-card hover:shadow-lg transition-all duration-200 group">
                 <CardHeader className="pb-3">
@@ -313,7 +313,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
         {/* Edit Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[525px]">
+          <DialogContent className="sm:max-w-[525px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Note</DialogTitle>
               <DialogDescription>
